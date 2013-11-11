@@ -1,0 +1,4 @@
+conkerorrc
+==========
+
+My Conkeror configuration
