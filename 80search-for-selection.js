@@ -1,9 +1,9 @@
 // 80search-for-selection.js
-
+// Section 8x is for text/caret-mode selection/editing/navigation tweaks (?)
 dumpln("80search-for-selection");
 
 // select text and google it.  See also "**c" for selecting text
-interactive("search-clipboard-contents", 
+interactive("search-clipboard-contents",
             "Search in Google the content of the X clipboard (the selected text)",
             "find-url",
             $browser_object=
@@ -19,6 +19,5 @@ interactive("search-clipboard-contents-doublequoted",
                 return "g \""+ read_from_x_primary_selection()+"\"";
             }
            );
-define_key(content_buffer_normal_keymap, "C-c y", "search-clipboard-contents");
-define_key(content_buffer_normal_keymap, "C-c Y", "search-clipboard-contents-doublequoted");
-
+//define_key(content_buffer_normal_keymap, "C-c y", "search-clipboard-contents");
+//define_key(content_buffer_normal_keymap, "C-c Y", "search-clipboard-contents-doublequoted");

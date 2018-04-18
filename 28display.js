@@ -1,4 +1,4 @@
-// Time-stamp: "2013-11-11 09:50:11 phil"
+// Time-stamp: "2015-03-05 21:59:34 phil"
 
 dumpln("28display");
 
@@ -6,6 +6,7 @@ require("io");
 require("spawn-process");
 require("interactive");
 
+// TODO Determine dynamically using the same technique as move-to-left-display etc
 const LEFT_DISPLAY_HP = "1440 900";
 const LEFT_DISPLAY_DELL = "1200 1920";
 
@@ -14,7 +15,7 @@ var width_by_height = LEFT_DISPLAY_HP;
 interactive(
     "left_display",
     "Position window on left display.",
-    function(I) {
+    function (I) {
         if ( width_by_height == "" || I.prefix_argument ) {
             I.window.minibuffer.message("Querying display layout...");
             var error = "";

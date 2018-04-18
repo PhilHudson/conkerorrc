@@ -1,5 +1,5 @@
 // 27minibuffer.js
-// Time-stamp: "2012-03-25 20:33:30 phil"
+// Time-stamp: "2016-10-31 08:30:57 phil"
 
 dumpln("27minibuffer");
 
@@ -25,3 +25,28 @@ add_hook("mode_line_hook", mode_line_adder(buffer_count_widget), true);
 
 // To invoke an alert, enter at a M-: prompt:
 //  get_recent_conkeror_window().alert("hello world");
+
+clock_time_format="%y-%m-%d%a%R";
+
+// Modify the code from modules/mode-line.js
+clock_widget.prototype.update = function () {
+    var time = new Date();
+    var formattedTime = time.toLocaleFormat(clock_time_format);
+    this.view.text =
+        formattedTime.replace(/\D{3}/,
+                              function abbrevToTwoCharDay(threeCharDay) {
+                                  return threeCharDay.slice(0, 2);
+                              }
+                             );
+    if (time.getSeconds() > 0 || time.getMilliseconds() > 100) {
+        this.window.clearTimeout(this.timer_ID);
+        var time = time.getSeconds() * 1000 + time.getMilliseconds();
+        time = 60000 - time;
+        this.timer_ID = this.window.setTimeout(this.do_update, time);
+        this.timer_timeout = true;
+    } else if (this.timer_timeout) {
+        this.window.clearTimeout(this.timer_ID);
+        this.timer_ID = this.window.setInterval(this.do_update, 60000);
+        this.timer_timeout = false;
+    }
+};

@@ -81,4 +81,4 @@ interactive("subscribe-feed", "C-u Subscribes to first encountered feed."
             alternates(subscribe_feed, subscribe_feed_all)
 );
 
-define_key(default_global_keymap, "/", "subscribe-feed");
+//define_key(default_global_keymap, "/", "subscribe-feed");

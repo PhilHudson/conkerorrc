@@ -1,8 +1,20 @@
-// Time-stamp: "2013-06-22 19:01:10 phil"
-
+// Time-stamp: "2016-07-06 23:47:44 phil"
+// Section 6x is for conkeror internals (or minibuffer interaction?) tweaks (?)
 dumpln("60default_webjump");
 
-read_url_handler_list = [read_url_make_default_webjump_handler("ixquick")];
+function read_url_google_translate_handler (input) {
+    const m = /^(\S+\|\S+)\s+(.*)/.exec(input);
+    if (m) {
+        return "http://translate.google.com/#" + m[1] + "|" + m[2];
+    } else {
+        return null;
+    }
+}
+
+read_url_handler_list = [
+    read_url_google_translate_handler,
+    read_url_make_default_webjump_handler("startpage")
+];
 
 /*
 What Counts as an URL?

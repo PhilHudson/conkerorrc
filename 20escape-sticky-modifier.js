@@ -1,5 +1,5 @@
-// Time-stamp: "2010-09-11 11:01:52 phil"
-
+// Time-stamp: "2014-01-27 14:10:52 phil"
+// Section 2x is for Conkeror UI tweaks (?)
 dumpln("20escape-stick-modifiers");
 
 /*

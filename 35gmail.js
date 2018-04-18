@@ -1,4 +1,4 @@
-// Time-stamp: "2013-10-14 14:28:53 phil"
+// Time-stamp: "2015-04-17 16:15:28 phil"
 
 dumpln("35gmail");
 
@@ -36,4 +36,5 @@ call_after_load("gmail", function () {
     define_key(gmail_keymap, "C-c s", "ph-gmail-spam");
     define_key(gmail_keymap, "C-c d", "ph-gmail-delete-forever");
     define_key(gmail_keymap, "C-c n", "ph-gmail-not-spam");
+    define_key(gmail_keymap, "C-return", null, $fallthrough);
 });

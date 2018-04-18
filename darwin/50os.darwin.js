@@ -1,4 +1,4 @@
-// Time-stamp: "2013-06-17 17:22:15 phil"
+// Time-stamp: "2018-04-14 21:07:57 phil"
 
 dumpln("50os.darwin");
 
@@ -18,13 +18,6 @@ modifiers.M = new modifier(function (event) { return event.altKey; },
                            function (event) { event.altKey = true; });
 modifiers.A = new modifier(function (event) { return event.metaKey; },
                            function (event) { event.metaKey = true; });
-
-
-// Zoom 150% by default on Mac
-// my_zoom_set is defined in 22default_zoom.js
-add_hook('content_buffer_started_loading_hook', my_zoom_set);
-add_hook('content_buffer_finished_loading_hook', my_zoom_set);
-add_hook('content_buffer_location_change_hook', my_zoom_set);
 
 
 // Keychain Services Integration extension setup:

@@ -1,4 +1,4 @@
-// Time-stamp: "2013-02-01 12:26:39 phil"
+// Time-stamp: "2016-05-19 10:55:10 phil"
 
 // See also 10webjumps.js
 
@@ -133,7 +133,7 @@ interactive("ytu-download-video",
 
 interactive("ytu-extract-sound",
             "extract sound from youtube video",
-            function(I){
+            function (I) {
 
                 Ytu.init(I);
 
@@ -142,7 +142,7 @@ interactive("ytu-extract-sound",
 
 interactive("ytu-extract-sound-and-download-video",
             "extract sound and video from youtube video",
-            function(I){
+            function (I) {
 
                 Ytu.init(I);
 
@@ -151,8 +151,8 @@ interactive("ytu-extract-sound-and-download-video",
 
 interactive("ytu-set-path",
             "set extracting path",
-            function(I){
-                desktop_dir= get_home_directory();
+            function (I) {
+                desktop_dir = get_home_directory().clone();
                 desktop_dir.appendRelativePath("Desktop");
                 let path = yield I.minibuffer.read($prompt = "Path to use to record sound and video : ",
                                                    $initial_value = desktop_dir.path + "/");
@@ -160,8 +160,15 @@ interactive("ytu-set-path",
                 Ytu.setPath(path);
             });
 
+/*
 define_key(content_buffer_normal_keymap, "y p", "ytu-set-path");
 define_key(content_buffer_normal_keymap, "y s", "ytu-extract-sound");
 define_key(content_buffer_normal_keymap, "y v", "ytu-download-video");
-define_key(content_buffer_normal_keymap, "y b", 
+define_key(content_buffer_normal_keymap, "y b",
            "ytu-extract-sound-and-download-video");
+*/
+
+/* General media viewing */
+set_default_browser_object("shell-command-on-url", browser_object_links);
+// Already mapped to "X"
+// define_key(content_buffer_normal_keymap, "x", "shell-command-on-url");

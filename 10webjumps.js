@@ -1,27 +1,34 @@
-// Time-stamp: "2013-10-13 04:23:21 phil"
-
+// Time-stamp: "2018-02-22 23:36:12 phil"
+// Section 1x is for URL handling tweaks (?)
 dumpln("10webjumps");
 
+
+require("opensearch.js");
 
 // Smart-select wrapper
 // From http://conkeror.org/Tips#SelectionSearches
 
 // selection searches
-function create_selection_search(webjump, key) {
-    interactive(webjump+"-selection-search",
+function create_selection_search (webjump, key) {
+    const webjump_selection_search = webjump + "-selection-search";
+    interactive(webjump_selection_search,
                 "Search " + webjump + " with selection contents",
                 "find-url-new-buffer",
                 $browser_object = function (I) {
                     return webjump + " " + I.buffer.top_frame.getSelection();});
-    define_key(content_buffer_normal_keymap, key.toUpperCase(), webjump + "-selection-search");
+    define_key(content_buffer_normal_keymap, key.toUpperCase(),
+               webjump_selection_search);
 
-    interactive("prompted-"+webjump+"-search", null,
+    const prompted_webjump_search = "prompted-" + webjump + "-search";
+    interactive(prompted_webjump_search,
+                "Search " + webjump,
                 function (I) {
                     var term = yield I.minibuffer.read_url($prompt = "Search "+webjump+":",
-                                                           $initial_value = webjump+" ");
+                                                           $initial_value = webjump+" ",
+                                                           $select = false);
                     browser_object_follow(I.buffer, FOLLOW_DEFAULT, term);
                 });
-    define_key(content_buffer_normal_keymap, key, "prompted-" + webjump + "-search");
+    define_key(content_buffer_normal_keymap, key, prompted_webjump_search);
 }
 // examples
 // create_selection_search("g","l");
@@ -36,28 +43,25 @@ function create_selection_search(webjump, key) {
 // minibuffer_read_url_select_initial = false;
 
 
+// MELPA
+define_webjump("melpa", "https://melpa.org/#/?q=%s");
 
-// Java API
-define_webjump("Java_API",
-    "http://www.google.co.uk/search?hl=en&as_sitesearch=http://java.sun.com/javase/6/docs/api/&q=%s",
-    $alternative="http://java.sun.com/javase/6/docs/api");
-
+// ELPA
+define_webjump("elpa", "https://elpa.gnu.org/packages/%s.html");
 
 // Emacswiki
 define_webjump("emacswiki",
-        "http://www.google.com/cse?cx=004774160799092323420%3A6-ff2s0o6yi"+
-            "&q=%s&sa=Search&siteurl=emacswiki.org%2F",
-        $alternative="http://www.emacswiki.org/");
+    "https://startpage.com/do/search?query=%s%20site%3Aemacswiki.org&cat=web&cmd=process_search&" +
+    "language=english&engine0=v1all&abp=-1",
+    $alternative="http://www.emacswiki.org/");
 
 create_selection_search("emacswiki", "a");
 
 
 // Translate
+define_webjump("trans_de", "http://translate.google.com/translate_t#de|en|%s");
+define_webjump("trans_fr", "http://translate.google.com/translate_#fr|en|%s");
 define_webjump("trans", "http://translate.google.com/translate_t#auto|en|%s");
-
-
-// Cuil
-define_webjump("cuil", "http://www.cuil.com/search?q=%s");
 
 
 // Anagrams
@@ -69,28 +73,27 @@ define_webjump("firefox_addons", "https://addons.mozilla.org/en-US/firefox/searc
 
 
 // Org-mode wiki
-define_webjump("orgmode-worg",
+define_webjump("worg",
     "https://www.google.com/cse?cx=002987994228320350715%3Az4glpcrritm" +
         "&q=%s&sa=Search&siteurl=orgmode.org%2Fworg",
     $alternative="http://orgmode.org/worg/");
 
-define_webjump("orgmode-orglist",
-               "http://search.gmane.org/?query=%s&group=gmane.emacs.orgmode");
+define_webjump("orglist",
+    "http://search.gmane.org/?query=%s&group=gmane.emacs.orgmode");
 
-create_selection_search("orgmode-worg", "w");
+create_selection_search("worg", "w");
 
 
 // Multiple GMail accounts
 define_webjump("gmail_ph", "https://mail.google.com/mail/u/0/"); //primary account
-define_webjump("gmail_sdss", "https://mail.google.com/mail/u/1/"); //secondary account
-define_webjump("gmail_dh", "https://mail.google.com/mail/u/2/"); //tertiary account
+define_webjump("gmail_dh", "https://mail.google.com/mail/u/1/"); //secondary account
 
 
 // Youtube
 define_webjump("youtube", "http://www.youtube.com/results?search_query=%s&search=Search");
 define_webjump("youtube-user", "http://youtube.com/profile_videos?user=%s");
 
-create_selection_search("youtube", "h");
+create_selection_search("youtube", "y");
 
 
 // GitHub
@@ -103,29 +106,41 @@ define_webjump("diaspora",
 interactive("diaspora", "Sending articles to Diaspora*, one click at a time!", "find-url", $browser_object = "diaspora");
 
 
-// Override built-in webjump to use new ratpoison wiki mirror:
+// Ratpoison
 define_webjump("ratpoisonwiki", "http://ratpoison.wxcvbn.org/?search=%s");
-
-create_selection_search("ratpoisonwiki", "j");
 
 
 // IMDB
-const IMDB_URL = "http://imdb.com/";
+var IMDB_URL = "http://imdb.com/"; // var not const for reloading
 
-define_webjump(
-   "imdb",
+define_webjump("imdb",
    function (arg) {
        return IMDB_URL + "find?q=" +
-encodeURIComponent(arg).replace(/%20/g, "+");
+           encodeURIComponent(arg).replace(/%20/g, "+");
    },
    $alternative = IMDB_URL
 );
 
 // Ixquick
-define_webjump("ixquick", "http://ixquick.com/do/metasearch.pl?query=%s");
+define_webjump("ixquick", "https://ixquick.com/do/metasearch.pl?query=%s");
+
+// Startpage
+define_webjump("startpage",
+    "https://startpage.com/do/search?query=%s&cat=web&cmd=process_search" +
+    "&language=english&engine0=v1all&abp=-1");
+
+create_selection_search("startpage", "h");
+
+define_webjump("startpage-post", "https://www.startpage.com/do/search",
+    $post_data = [["query", "%s"], ["cat", "web"],
+                  ["cmd", "process_search"], ["language", "english"],
+                  ["engine0", "v1all"], ["abp", "-1"]]);
+
+define_webjump("startpage-image",
+    "https://eu.startpage.com/do/search?query=%s&cat=pics&cmd=process_search&language=english");
 
 // The Pirate Bay
-define_webjump("pirate", "http://thepiratebay.sx/search/%s");
+define_webjump("pirate", "https://thepiratebay.org/search/%s/0/7/0");
 
 // Amazon
 define_webjump("amazon",
@@ -141,6 +156,7 @@ define_webjump("bashfaq",
     $alternative = "http://mywiki.wooledge.org/BashFAQ");
 
 // CommandLineFu
+/* *
 define_webjump("commandlinefu",
     function(term) {
         return 'http://www.commandlinefu.com/commands/matching/' +
@@ -150,19 +166,128 @@ define_webjump("commandlinefu",
     },
     $argument = 'optional',
     $alternative = "http://www.commandlinefu.com/");
+/* */
+define_webjump("commandlinefu", "http://www.commandlinefu.com/commands/matching/%s");
 
-// Google CodeSearch
-define_webjump("codesearch", "http://www.google.com/codesearch?q=%s");
 
 // Mozilla Dev Center
 define_webjump("mozilladevcenter",
                "https://developer.mozilla.org/Special:Search?search=%s&type=fulltext&go=Search");
 
 // eBay
-define_webjump("ebay", "http://search.ebay.com/search/search.dll?query=%s");
+define_opensearch_webjump("ebay", "ebay-uk.xml");
 
-// Lisp code
-define_webjump("lispcode", "http://www.koders.com/?s=%s&li=*&la=Lisp");
+// Maplin
+define_webjump("maplin",
+    function(arg) {
+        return "http://www.maplin.co.uk/search?text=" + arg.replace(/ /g, '+');
+    }
+    );
+
+// Lisp code search
+define_webjump("lispcode", "http://code.ohloh.net/search?s=%s&fl=Lisp");
 
 // JS code
 define_webjump("js", "http://www.koders.com/?s=%s&li=*&la=JavaScript");
+
+// Cliki (redefine)
+define_webjump("cliki", "http://www.cliki.net/site/search?query=%s");
+
+// Lisp Games wiki
+define_webjump("lispgames",
+    "http://lispgames.org/index.php?search=%s&go=Go&title=Special%3ASearch");
+
+// Vimeo
+define_webjump("vimeo", "http://vimeo.com/search?q=%s");
+
+
+// OpenStreetMap
+define_webjump("openstreetmap", "http://www.openstreetmap.org/search?query=%s");
+
+
+// Wikiquote
+define_webjump("wikiquote", "https://www.wikiquote.org/search-redirect.php?family=wikiquote&search=%s&language=en&go=Go");
+
+
+// Google Maps
+define_webjump("gmaps", "https://www.google.co.uk/maps/@52.8382004,-2.3278149,6z?hl=en&q=%s");
+create_selection_search("gmaps", "p");
+
+// AllMusic
+define_webjump("allmusic", "http://www.allmusic.com/search/all/%s");
+
+
+define_webjump("down?", function (url) {
+    if (url) {
+        return "http://downforeveryoneorjustme.com/" + url;
+    } else {
+        return "javascript:window.location.href='http://downforeveryoneorjustme.com/'+window.location.href;";
+    }
+});
+
+// define_webjump("wayback",
+//     function (url) {
+//         if (url) {
+//             return "http://web.archive.org/web/*/" + url;
+//         } else {
+//             return "javascript:window.location.href='http://web.archive.org/web/*/'+window.location.href;";
+//         }
+//     },
+//     $argument = "optional");
+
+define_webjump("validate",
+    "http://validator.w3.org/check?uri=%s&charset=%28detect+automatically%29&doctype=Inline&group=0");
+
+define_webjump("validate-css",
+    "http://jigsaw.w3.org/css-validator/validator?uri=%s&profile=css21&usermedium=all&warning=1&lang=en");
+
+define_webjump("friday?", "http://docgno.me/is-it-friday-yet.php");
+
+define_webjump("gmane", "http://gmane.org/find.php?list=%s");
+
+
+
+
+/* From Firefox keyword bookmarks on lily
+
+See: http://www.conkeror.org/Tips#Export_Firefox_Keyword_Searches_as_Conkeror_Webjumps
+
+r4|javascript:(function(){u="http://www.bbc.co.uk/iplayer/console/radio4fm/?fm";window.open(u)})()
+if|javascript:(function(){u="https://my.if.com/";window.open(u)})()
+fb|javascript:(function(){u="http://www.facebook.com";window.open(u)})()
+fb|javascript:(function(){u="http://stockcharts.com/charts/YieldCurve.html";window.open(u)})()
+r|http://192.168.1.1:8888/doc/online.sht
+pb|http://thepiratebay.se/s/?q=%s&=on&page=0&orderby=7
+ew|http://www.emacswiki.org/cgi-bin/emacs?search=%s
+rp|http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl?search=%s
+fsf|https://fsf.org/search?SearchableText=%s
+osm|http://www.openstreetmap.org/search?query=%s
+gm|https://maps.google.com/maps?f=q&source=s_q&output=js&hl=en&geocode=&abauth=536c862ad4UXwTFcODdhacRBhMg80ZEqqJA&authuser=0&q=%s
+worg|http://www.google.com/cse?cx=002987994228320350715%3Az4glpcrritm&ie=UTF-8&q=%s
+bbc|http://search.bbc.co.uk/search?uri=/&q=%s
+quote|https://www.wikiquote.org/search-redirect.php?family=wikiquote&search=%s&language=en&go=Go
+gmap|https://www.google.co.uk/maps/@52.8382004,-2.3278149,6z?hl=en?q=%s&=
+cmd|http://www.commandlinefu.com/search/handler
+cw|http://conkeror.org/FrontPage?action=fullsearch&context=180&value=%s
+
+ */
+
+define_webjump("isohunt",
+    function(arg) {
+        return "https://isohunt.to/torrents/?ihq=" + arg.replace(/ /g, '+');
+    }
+    );
+
+define_webjump("snopes",
+    function(arg) {
+        return "http://www.snopes.com/search/?q=" + arg.replace(/ /g, '+');
+    }
+    );
+
+define_webjump("bbc",
+    function(arg) {
+        return "http://www.bbc.co.uk/search?q=" + arg.replace(/ /g, '+');
+    }
+    );
+
+define_webjump("thesaurus", "http://www.thesaurus.com/browse/%s");

@@ -1,5 +1,5 @@
-// Time-stamp: "2010-09-11 11:03:06 phil"
-
+// Time-stamp: "2014-05-01 21:20:37 phil"
+// Section 3x is for mode/site-specific tweaks (?)
 dumpln("30google-bookmarks");
 
 function elementText(el) {
@@ -102,6 +102,7 @@ function parseListElement(parentel, expectedNodeName) {
   return result;
 }
 
+// FIXME probably broken by changes introduced 2014-05-01 in 1.0pre1
 function google_bookmark_completer(input, pos, conservative) {
   var bookmarks = yield searchBookmarks(input);
   var titles = new Array();
@@ -167,4 +168,4 @@ interactive('goto-google-bookmark',
               goto_google_bookmark_new_buffer_background
             ));
 
-define_key(content_buffer_normal_keymap, 'p', 'goto-google-bookmark');
+//define_key(content_buffer_normal_keymap, 'p', 'goto-google-bookmark');
