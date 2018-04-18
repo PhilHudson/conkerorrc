@@ -1,0 +1,23 @@
+/*
+> * How can I enforce an ordering among the files in ~/.conkerorrc/?
+>
+> My original init file eventually grew large enough that I divided it
+> into a number of separate files.  There are dependencies among some of
+> them, but I don't know of a way to have file B require that file A is
+> loaded first.  The require() function doesn't work for this purpose.
+> All I've been able to do so far is name the files in ascending lexical
+> order, so that for example "a-foo.js" can be depended upon by
+> "b-bar.js", etc.  Is there a better way?
+>
+
+You're correct that 'require' does not work for this purpose.  The reason
+is that ~/.conkerorrc is not considered a repository of modules - just a
+bucket of *.js files that are loaded at startup.  If you have need of
+modules, make a directory for your modules, add its location to
+'load_paths', and 'require' away.
+
+    let (home = get_home_directory().clone()) {
+        home.appendRelativePath(".conkerorrc/modules");
+        load_paths.unshift("file://"+home.path);
+    }
+*/
