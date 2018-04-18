@@ -1,1 +1,1 @@
-/Users/phil/.sysconf/Mac/Users/phil/.conkerorrc/50os.darwin.js
+load(getenv("OSTYPE") + "/50os." + getenv("OSTYPE") + ".js");
