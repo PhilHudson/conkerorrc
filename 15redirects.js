@@ -1,4 +1,4 @@
-// Time-stamp: "2018-02-27 03:14:39 phil"
+// Time-stamp: "2018-11-29 06:28:04 phil"
 
 dumpln("15redirects");
 
@@ -21,13 +21,13 @@ define_client_redirect("tpb",
         return uri.spec.replace(/thepiratebay.se/, "thepiratebay.org");
     });
 
-function open_in_chromium (url, window) {
+function open_in_chromium (url) {
     const cmd_str = "chromium '" + url + "'";
     if (debug_redirects) {
         dumpln(cmd_str);
     }
-    ph_safe_message(window, 'Issuing ' + cmd_str);
-    const result = yield shell_command(cmd_str);
+    ph_safe_message(null, 'Issuing ' + cmd_str);
+    const result = yield shell_command_with_argument("chromium '{}'", url);
     if (result != 0) {
         throw new interactive_error("status " + result + ' for ' + cmd_str);
     }
@@ -38,8 +38,8 @@ function open_in_chromium (url, window) {
 
 interactive("open-in-chromium", "Open URL in Chromium",
           function (I) {
-              yield org_capture(ph_encodeURIComponent(I.buffer.display_uri_string),
-                                I.window);
+              yield open_in_chromium(ph_encodeURIComponent(I.buffer.display_uri_string),
+                                     I.window);
           });
 // Browse in Chromium with C-c c
 define_key(content_buffer_normal_keymap, "C-c c", "open-in-chromium");
@@ -58,8 +58,7 @@ function define_chromium_redirect(name, regexp) {
                 dumpln("uri.host: " + uri.host);
                 dumpln(name + " redirect from: " + uri.spec);
             }
-            // FIXME How do I get the Conkeror window object here?
-            open_in_chromium(uri.spec, null);
+            open_in_chromium(uri.spec);
             return null;
         });
 }
