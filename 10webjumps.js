@@ -1,4 +1,4 @@
-// Time-stamp: "2018-02-22 23:36:12 phil"
+// Time-stamp: "2018-09-09 21:31:33 phil"
 // Section 1x is for URL handling tweaks (?)
 dumpln("10webjumps");
 
@@ -291,3 +291,6 @@ define_webjump("bbc",
     );
 
 define_webjump("thesaurus", "http://www.thesaurus.com/browse/%s");
+define_webjump("codesearch", "http://codesearch.debian.net/search?q=%s");
+define_webjump("tunefind", "https://www.tunefind.com/search/site?q=%s");
+define_webjump("ettv", "https://www.ettv.tv/torrents-search.php?search=%s");
