@@ -1,4 +1,4 @@
-// Time-stamp: "2016-01-18 14:31:31 phil"
+// Time-stamp: "2018-04-28 10:58:08 phil"
 // Section 0x is for common (global) settings (?)
 
 /*
@@ -155,9 +155,7 @@ let (env = Cc['@mozilla.org/process/environment;1']
 
 // Minibuffer message in one line
 function ph_safe_message (window, message) {
-    if (window != null) {
-      window.minibuffer.message(message);
-    }
+    (window || get_recent_conkeror_window()).minibuffer.message(message);
 }
 
 function ph_X11_activate (window_title_regexp) {
