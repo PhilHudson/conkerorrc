@@ -1,4 +1,4 @@
-// Time-stamp: "2018-04-14 21:32:19 phil"
+// Time-stamp: "2018-09-09 21:34:55 phil"
 
 dumpln("22defaultzoom");
 
@@ -33,6 +33,7 @@ var ph_120_zoom_sites = [
         /^https?:\/\/[^/]*startpage\.com\//     ,
         /^https?:\/\/[^/]*orgmode\.org\//       ,
         /^https?:\/\/[^/]*c4ss\.org\//          ,
+        /^https?:\/\/[^/]*ettv\.tv\//           ,
         /^https?:\/\/[^/]*github\.com\//
 ];
 
@@ -44,6 +45,8 @@ var ph_150_zoom_sites = [
         /^https?:\/\/[^/]*twitter\.com\//       ,
         /^https?:\/\/[^/]*mail\.google\.com\//       ,
         /^https?:\/\/[^/]*reddit\.com\//,
+        /^https?:\/\/[^/]*joindiaspora\.com\/stream/,
+        /^https?:\/\/[^/]*sourceforge\.net/,
         /^https?:\/\/[^/]*theregister\.co\.uk\//
 ];
 
