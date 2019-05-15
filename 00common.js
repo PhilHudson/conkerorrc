@@ -1,4 +1,4 @@
-// Time-stamp: "2018-04-28 10:58:08 phil"
+// Time-stamp: "2019-01-20 12:19:21 phil"
 // Section 0x is for common (global) settings (?)
 
 /*
@@ -159,9 +159,9 @@ function ph_safe_message (window, message) {
 }
 
 function ph_X11_activate (window_title_regexp) {
-    shell_command_blind(
-        "xdotool search --onlyvisible --name '" + window_title_regexp + "'"
-            + " windowactivate"
+    shell_command_with_argument_blind(
+        "xdotool search --onlyvisible --name '{}' windowactivate",
+        window_title_regexp
     );
 } // TODO Interactive form
 
@@ -188,9 +188,9 @@ interactive("load-file",
                config_dir = get_home_directory().clone();
                config_dir.appendRelativePath(".conkerorrc");
                filename = (yield I.minibuffer.read($prompt = "Load file: ",
-                                                   $initial_value = config_dir.path + "/",
+                                                   $initial_value = `${config_dir.path}/`,
                                                    $history = "load_file"));
-               I.window.minibuffer.message("Loaded file "+filename);
+               I.window.minibuffer.message(`Loaded file ${filename}`);
                load(make_file(filename));
            }
           );
