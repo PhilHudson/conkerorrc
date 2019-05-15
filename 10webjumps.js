@@ -1,4 +1,4 @@
-// Time-stamp: "2018-09-09 21:31:33 phil"
+// Time-stamp: "2019-02-20 15:42:24 phil"
 // Section 1x is for URL handling tweaks (?)
 dumpln("10webjumps");
 
@@ -10,21 +10,21 @@ require("opensearch.js");
 
 // selection searches
 function create_selection_search (webjump, key) {
-    const webjump_selection_search = webjump + "-selection-search";
+    const webjump_selection_search = `${webjump}-selection-search`;
     interactive(webjump_selection_search,
-                "Search " + webjump + " with selection contents",
+                `Search ${webjump} with selection contents`,
                 "find-url-new-buffer",
                 $browser_object = function (I) {
-                    return webjump + " " + I.buffer.top_frame.getSelection();});
+                    return `${webjump} ${I.buffer.top_frame.getSelection()}`;});
     define_key(content_buffer_normal_keymap, key.toUpperCase(),
                webjump_selection_search);
 
-    const prompted_webjump_search = "prompted-" + webjump + "-search";
+    const prompted_webjump_search = `prompted-${webjump}-search`;
     interactive(prompted_webjump_search,
-                "Search " + webjump,
+                `Search ${webjump}`,
                 function (I) {
-                    var term = yield I.minibuffer.read_url($prompt = "Search "+webjump+":",
-                                                           $initial_value = webjump+" ",
+                    var term = yield I.minibuffer.read_url($prompt = `Search ${webjump}:`,
+                                                           $initial_value = `${webjump} `,
                                                            $select = false);
                     browser_object_follow(I.buffer, FOLLOW_DEFAULT, term);
                 });
@@ -180,7 +180,7 @@ define_opensearch_webjump("ebay", "ebay-uk.xml");
 // Maplin
 define_webjump("maplin",
     function(arg) {
-        return "http://www.maplin.co.uk/search?text=" + arg.replace(/ /g, '+');
+        return `http://www.maplin.co.uk/search?text=${arg.replace(/ /g, '+')}`;
     }
     );
 
@@ -219,7 +219,7 @@ define_webjump("allmusic", "http://www.allmusic.com/search/all/%s");
 
 define_webjump("down?", function (url) {
     if (url) {
-        return "http://downforeveryoneorjustme.com/" + url;
+        return `http://downforeveryoneorjustme.com/${url}`;
     } else {
         return "javascript:window.location.href='http://downforeveryoneorjustme.com/'+window.location.href;";
     }
@@ -290,7 +290,10 @@ define_webjump("bbc",
     }
     );
 
-define_webjump("thesaurus", "http://www.thesaurus.com/browse/%s");
+define_webjump("th", "http://www.thesaurus.com/browse/%s");
 define_webjump("codesearch", "http://codesearch.debian.net/search?q=%s");
 define_webjump("tunefind", "https://www.tunefind.com/search/site?q=%s");
 define_webjump("ettv", "https://www.ettv.tv/torrents-search.php?search=%s");
+define_webjump("rarbg", "https://rarbg.to/torrents.php?search=%s&order=size&by=ASC");
+define_webjump("zoo", "https://zooqle.com/search?q=%s&s=sz&v=t&sd=a");
+define_webjump("canary", "https://www.thecanary.co/?s=%s");
