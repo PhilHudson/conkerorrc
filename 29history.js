@@ -1,4 +1,4 @@
-// Time-stamp: "2015-01-30 09:48:44 phil"
+// Time-stamp: "2018-12-27 19:55:26 phil"
 // From: http://retroj.net/git/conkerorrc/history.js
 dumpln("29history");
 
@@ -10,7 +10,8 @@ define_browser_object_class(
     function (I, prompt) {
         check_buffer (I.buffer, content_buffer);
         var result = yield I.buffer.window.minibuffer.read_url(
-            $prompt = prompt,  $use_webjumps = false, $use_history = true, $use_bookmarks = false);
+            $prompt = prompt,  $use_webjumps = false, $use_history = true,
+            $use_bookmarks = false);
         yield co_return (result);
     },
     $hint = "choose url from history");
@@ -93,7 +94,7 @@ function history_clean (predicates) {
         }
     }
     if (verbose) {
-        dumpln(" -> " + (count - predhits.reduce(function (a, b) a + b, 0)) +
+        dumpln(` -> ${count - predhits.reduce(function (a, b) a + b, 0)}` +
                (dry_run ? " [DRY_RUN]" : ""));
         for (j = 0; j < npred; ++j) {
             var name = predicates[j].name;
@@ -101,7 +102,7 @@ function history_clean (predicates) {
                 name = function_pretty_name(predicates[j]);
             }
             var hits = predhits[j] || 0;
-            dumpln("  " + name + ": " + hits);
+            dumpln(`  ${name}: ${hits}`);
         }
     }
 }
