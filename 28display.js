@@ -1,4 +1,4 @@
-// Time-stamp: "2015-03-05 21:59:34 phil"
+// Time-stamp: "2018-12-27 20:28:23 phil"
 
 dumpln("28display");
 
@@ -10,7 +10,7 @@ require("interactive");
 const LEFT_DISPLAY_HP = "1440 900";
 const LEFT_DISPLAY_DELL = "1200 1920";
 
-var width_by_height = LEFT_DISPLAY_HP;
+var width_by_height = LEFT_DISPLAY_DELL;
 
 interactive(
     "left_display",
@@ -21,7 +21,7 @@ interactive(
             var error = "";
             width_by_height = "";
             var result = yield shell_command(
-                "left-display",
+                "left_hardware_display_dimensions",
                 $fds = [
                     {
                         output:
@@ -46,7 +46,7 @@ interactive(
                 ]
             );
             if (result != 0 ) {
-                throw new interactive_error("status " + result + ", " + error);
+                throw new interactive_error(`status ${result}, ${error}`);
             }
             width_by_height = width_by_height.trim();
             I.window.minibuffer.message("Querying display layout...done");
@@ -57,8 +57,8 @@ interactive(
             I.window.innerWidth=1440;
             I.window.innerHeight=878;
         } else {
-            I.window.screenX=-1200;
-            I.window.screenY=-870;
+            I.window.screenX=0;
+            I.window.screenY=0;
             I.window.innerWidth=1200;
             I.window.innerHeight=1898;
         }
