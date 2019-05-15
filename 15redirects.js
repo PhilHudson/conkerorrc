@@ -1,4 +1,4 @@
-// Time-stamp: "2018-11-29 06:28:04 phil"
+// Time-stamp: "2018-12-27 20:18:05 phil"
 
 dumpln("15redirects");
 
@@ -8,28 +8,52 @@ var debug_redirects = false;
 
 define_client_redirect("tpb",
     function (uri) {
-        if (! /thepiratebay\.se/.test(uri.host)) {
+        if (! /thepiratebay\.se$/.test(uri.host)) {
             return null;
         }
         if (debug_redirects) {
             dumpln("tpb redirect starting");
-            dumpln("uri.spec: " + uri.spec);
-            dumpln("uri.host: " + uri.host);
-            dumpln("tpb redirect from: " + uri.spec);
+            dumpln(`uri.spec: ${uri.spec}`);
+            dumpln(`uri.host: ${uri.host}`);
+            dumpln(`tpb redirect from: ${uri.spec}`);
             dumpln(uri.spec.replace(/thepiratebay.se/, "thepiratebay.org"));
         }
         return uri.spec.replace(/thepiratebay.se/, "thepiratebay.org");
     });
 
-function open_in_chromium (url) {
-    const cmd_str = "chromium '" + url + "'";
+function yd (url) {
+    const cmd_str = `yd2tv '${url}'`;
     if (debug_redirects) {
         dumpln(cmd_str);
     }
-    ph_safe_message(null, 'Issuing ' + cmd_str);
+    ph_safe_message(null, `Issuing ${cmd_str}`);
+    shell_command_with_argument_blind("yd2tv '{}'", url);
+}
+
+define_client_redirect("yd",
+    function (uri) {
+        if (! /youtu(be\.com|\.be)$/.test(uri.host)) {
+            return null;
+        }
+        if (debug_redirects) {
+            dumpln("yd redirect starting");
+            dumpln(`uri.spec: ${uri.spec}`);
+            dumpln(`uri.host: ${uri.host}`);
+            dumpln(`yd redirect from: ${uri.spec}`);
+        }
+        yd(uri.spec);
+        return "about:blank";
+    });
+
+function open_in_chromium (url) {
+    const cmd_str = `chromium '${url}'`;
+    if (debug_redirects) {
+        dumpln(cmd_str);
+    }
+    ph_safe_message(null, `Issuing ${cmd_str}`);
     const result = yield shell_command_with_argument("chromium '{}'", url);
     if (result != 0) {
-        throw new interactive_error("status " + result + ' for ' + cmd_str);
+        throw new interactive_error(`status ${result} for ${cmd_str}`);
     }
     blocking_pause(3000);
     // Raise the Chromium frame
@@ -54,12 +78,12 @@ function define_chromium_redirect(name, regexp) {
             }
             if (debug_redirects) {
                 dumpln(name + " redirect starting");
-                dumpln("uri.spec: " + uri.spec);
-                dumpln("uri.host: " + uri.host);
-                dumpln(name + " redirect from: " + uri.spec);
+                dumpln(`uri.spec: ${uri.spec}`);
+                dumpln(`uri.host: ${uri.host}`);
+                dumpln(`${name} redirect from: ${uri.spec}`);
             }
             open_in_chromium(uri.spec);
-            return null;
+            return "about:blank";
         });
 }
 
