@@ -1,4 +1,4 @@
-// Time-stamp: "2015-05-21 12:47:56 phil"
+// Time-stamp: "2018-12-27 20:06:48 phil"
 // Section 7x is for Conkeror internal tweaks (?)
 dumpln("72theme");
 
@@ -35,10 +35,10 @@ function ph_generate_css (json) {
         for (var j in json[i]) {
             if (j == "CSSJSON-INHERIT-SELECTOR") {
                 for (var k in json[json[i][j]]) {
-                    styleStr += k + ": \"" + json[json[i][j]][k] + " !important\"; ";
+                    styleStr += `${k}: "${json[json[i][j]][k]} !important"; `;
                 }
             } else {
-                styleStr += j + ": \"" + json[i][j] + " !important\"; ";
+                styleStr += `${j}: "${json[i][j]} !important"; `;
             }
         }
         styleStr += "} ";
@@ -83,11 +83,11 @@ function darken_page (I) {
     const styles = ph_generate_css(ph_dark_css);
     const document = I.window.buffers.current.document;
     if (document.createStyleSheet) {
-        document.createStyleSheet("javascript:'" + styles + "'");
+        document.createStyleSheet(`javascript:'${styles}'`);
     } else {
         const newSS = document.createElement('link');
         newSS.rel = 'stylesheet';
-        newSS.href = 'data:text/css,' + escape(styles);
+        newSS.href = `data:text/css,${escape(styles)}`;
         document.getElementsByTagName("head")[0].appendChild(newSS);
     }
 }
